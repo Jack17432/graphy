@@ -1,12 +1,55 @@
 use std::collections::HashMap;
+use super::super::nodes::Children;
 
-struct Hackenbush {
-    edges: HashMap<usize, Vec<usize>>
+#[derive(Debug)]
+pub struct Hackenbush {
+    /// {start_Node: (end_Node, player)}
+    /// No owning player if player == 0
+    /// blue player if player == 1
+    /// red player if player == 2
+    edges: HashMap<usize, Vec<(usize, u8)>>
+}
 
-    // dict of int: node
-    // where node has a list of edges that it is conneceted to
-    // when a edge is removed it dose a dfs to try and find a root node
-    // if it does not then it will do a dfs and remove all the nodes from depth to node that is oposit of the removed edge
-    // this way we can garentie that each node has a edge conecting it to the roots
-    // the node will just be a vec1 containg a tuple that is a int for the node it is connect to and the player who owns that edge.
+impl Hackenbush {
+    pub fn new() -> Self {
+        Self {
+            edges: HashMap::from([
+                (0, vec![]),
+            ])
+        }
+    }
+
+    pub fn from(edges: HashMap<usize, Vec<(usize, u8)>>) -> Self {
+        assert!(edges.get(&0).is_some(), "must contain a 'root' node == 1");
+
+        let mut game = Self::new();
+        game.edges = edges;
+        game
+    }
+
+    pub fn get_root_edges(&self) -> &Vec<(usize, u8)> {
+        &self.edges[&0]
+    }
+}
+
+impl Children for Hackenbush {
+    fn children(&self, node: usize) -> Option<&Vec<(usize, u8)>> {
+        self.edges.get(&node)
+    }
+}
+
+#[cfg(test)]
+mod hackenbush_unit {
+    use super::Hackenbush;
+    use std::collections::HashMap;
+
+    #[test]
+    fn new_hackenbush() {
+        let game1 = Hackenbush::new();
+        let game1_edges = HashMap::from([
+            (0, vec![]),
+        ]);
+
+        assert_eq!(game1.edges, game1_edges)
+    }
 }

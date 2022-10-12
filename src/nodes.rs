@@ -1,5 +1,9 @@
 use std::rc::Rc;
 
+pub trait Children {
+    fn children<T: std::cmp::PartialEq, C>(&self, node: T) -> Option<&Vec<C>>;
+}
+
 pub struct Node<T> {
     pub data: T,
     pub children: Vec<Rc<Node<T>>>,
