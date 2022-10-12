@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod nodes {
     use graphy::nodes::Node;
+    use std::rc::Rc;
 
     #[test]
     fn create_node_new() {
@@ -54,8 +55,6 @@ mod nodes {
 
     #[test]
     fn get_data_from_children() {
-        use std::rc::Rc;
-
         let node1 = Node::from(5);
         let node2 = Node::from(10);
         let node3 = Node::new(15, vec![Rc::clone(&node1), Rc::clone(&node2)]);

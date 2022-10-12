@@ -1,4 +1,5 @@
 pub mod nodes;
+pub mod gamer_theory;
 
 #[cfg(test)]
 mod tests {
